@@ -1,0 +1,20 @@
+{
+  "s3": {
+    "stage": {
+      "bucket": "apps-stage.seattletimesdata.com",
+      "path": "down-scrutiny"
+    },
+    "live": {
+      "bucket": "",
+      "path": ""
+    }
+  },
+  "title": "",
+  "description": "",
+  "url": "",
+  "slug": "",
+  "tags": [],
+  "image": "http://seattletimes.com/art/ui/fb_icon_large.jpg",
+  "production": false,
+  "embedded": true
+}
