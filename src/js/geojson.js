@@ -65,3 +65,5 @@ module.exports = {
     listeners.push(fn);
   }
 };
+
+document.querySelector(".geolocate").addEventListener("click", () => module.exports.geolocate());

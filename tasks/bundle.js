@@ -24,8 +24,7 @@ module.exports = function(grunt) {
     var assembly = b.bundle();
 
     assembly.on("error", function(err) {
-      grunt.fail.fatal(err);
-      done();
+      grunt.log.errorlns(err.message);
     });
 
     if (mode == "dev") {

@@ -5,9 +5,13 @@ module.exports = function(grunt) {
     grunt.task.requires("state");
     grunt.task.requires("csv");
     grunt.task.requires("json");
+
+    var moment = require("moment");
    
     var candidates = {};
-    var zips = require("../src/js/zipcodes");
+    var zips = require("./lib/zipcodes");
+
+    var dateCutoff = new Date(2015, 0, 1);
 
     /*
     First we sort all the records into campaigns.
@@ -55,10 +59,12 @@ module.exports = function(grunt) {
         //prevent FP errors
         var a = contrib.amount * 100;
         agg.total += a;
-        if (contrib.date) {
-          var date = [contrib.date.getMonth() + 1, contrib.date.getDate()].join("/");
-          if (!agg.byDate[date]) agg.byDate[date] = 0;
-          agg.byDate[date] += a;
+        if (contrib.date && contrib.date > dateCutoff) {
+          var date = moment(contrib.date);
+          date.day(0);
+          var timestamp = date.valueOf();
+          if (!agg.byDate[timestamp]) agg.byDate[timestamp] = 0;
+          agg.byDate[timestamp] += a;
         }
         agg.byDistrict[contrib.district || "none"] += a;
         if (contrib.inSeattle) agg.seattle += a;
@@ -84,7 +90,7 @@ module.exports = function(grunt) {
       var race = {
         district: district,
         candidates: candidates,
-        total: candidates.reduce(function(prev, d) { console.log(d.name); return prev + d.total }, 0),
+        total: candidates.reduce(function(prev, d) { return prev + d.total }, 0),
         count: candidates.reduce(function(prev, d) { return prev + d.count }, 0),
         external: candidates.reduce(function(prev, d) { return prev + (d.total - d.byDistrict[district]) }, 0)
       };

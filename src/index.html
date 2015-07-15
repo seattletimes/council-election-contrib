@@ -11,84 +11,35 @@
   <body>
 
     <responsive-child>
+      <h1>Council Election Funding</h1>
+
+      <p>
+        This interactive shows all contributions filed with the Seattle Ethics and Elections Committee for the 2015 race. Tap a district on the map to begin. Swipe or use the arrow keys to move between districts and candidates.
+
       <main class="interactive">
-        <header class="breadcrumbs">
-          <a class="fa fa-globe" row="map"></a>
-          <a class="district" row="district"></a>
-        </header>
         
-        <div class="rows">
-
-          <section class="map row focused">
-            <div class="card">
-              <div class="card-header">
-                Choose a district <a class="fa fa-map-marker geolocate"></a>
-              </div>
-              <div class="card-content">
-                <div class="map-aspect">
-                  <leaflet-map fixed zoom=10>
-                    <tile-layer layer="cartoPositron"></tile-layer>
-                  </leaflet-map>
-                <div>
-              </div>
+          <section class="map card focused">
+            <div class="card-header">
+              Choose a district <a class="fa fa-map-marker geolocate"></a>
+            </div>
+            <div class="card-content">
+              <div class="map-aspect">
+                <leaflet-map fixed zoom=10>
+                  <tile-layer layer="cartoPositron"></tile-layer>
+                </leaflet-map>
+              <div>
             </div>
           </section>
 
-          <section class="district row offscreen">
-            <% for (var district in json.aggregated) { var race = json.aggregated[district]; %>
-            <div class="district card" data-district="<%= district %>">
-              <div class="card-header">
-                District <%= district %>
-              </div>
-              <div class="card-content">
-                
-                <div class="candidates">
-                  <h2>Candidates</h2>
-                  <select class="choose-candidate" data-district="<%= district %>" autocomplete="off">
-                    <option value="" selected="selected">Choose a candidate</option>
-                  <% race.candidates.forEach(function(candidate) { %>
-                    <option value="<%= candidate.name %>"> <%= candidate.name %>
-                  <% }); %>
-                  </select>
-                </div>
-                
-                <div class="stats">
-                  <ul>
-                    <li> Total: $<%= t.formatNumber(race.total.toFixed(2)) %>
-                    <li> Count: <%= t.formatNumber(race.count) %>
-                    <li> External: $<%= t.formatNumber(race.external.toFixed(2)) %>
-                  </ul>
-                </div>
+          <section class="district card offscreen"></section>
 
-                <div class="canvas-container">
-                  <h2>External funding:</h2>
-                  <div class="aspect-inner">
-                    <canvas class="external-funding"></canvas>
-                  </div>
-                </div>
-
-                <div class="canvas-container">
-                  <h2>Funding by date</h2>
-                  <div class="aspect-inner">
-                    <canvas class="by-date"></canvas>
-                  </div>
-                </div>
-
-                <div class="clearing"></div>
-              </div>
-            </div>
-            <% } %>
-          </section>
-
-          <section class="candidate row offscreen"></section>
-
-        </div>
+          <section class="candidate card offscreen"></section>
 
       </main>
     </responsive-child>
 
     <script>
-window.contribData = <%= JSON.stringify(json.races) %>;
+window.contribData = <%= JSON.stringify(json.aggregated) %>;
     </script>
     <script src="app.js"></script>
     <% if (json.project.production) { %>

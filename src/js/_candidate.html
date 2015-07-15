@@ -1,32 +1,28 @@
-<% data.candidates.forEach(function(candidate) { %>
-<div class="candidate card" data-name="<%= candidate.name %>">
-  <div class="card-header">
-    <%= candidate.name %>
-  </div>
-  <div class="card-content">
-    
-    <div class="stats">
-      <ul>
-        <li> Total: $<%= candidate.total.toFixed(2) %>
-        <li> Count: <%= candidate.count.toLocaleString().replace(/\..*$/, "") %>
-      </ul>
-    </div>
-
-    <div class="canvas-container">
-      <h2>External funding:</h2>
-      <div class="aspect-inner">
-        <canvas class="external-funding"></canvas>
-      </div>
-    </div>
-
-    <div class="canvas-container">
-      <h2>Funding by date</h2>
-      <div class="aspect-inner">
-        <canvas class="by-date"></canvas>
-      </div>
-    </div>
-
-    <div class="clearing"></div>
-  </div>
+<div class="card-header">
+  <%= data.name %>
 </div>
-<% }); %>
+<div class="card-content">
+  
+  <div class="stats">
+    <ul>
+      <li> Total: $<%= data.total.toFixed(2) %>
+      <li> Count: <%= data.count.toLocaleString().replace(/\..*$/, "") %>
+    </ul>
+  </div>
+
+  <div class="canvas-container">
+    <h2>External funding:</h2>
+    <div class="canvas-aspect">
+      <canvas class="external"></canvas>
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <h2>Funding by date</h2>
+    <div class="canvas-aspect">
+      <canvas class="by-date"></canvas>
+    </div>
+  </div>
+
+  <div class="clearing"></div>
+</div>
