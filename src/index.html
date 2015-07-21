@@ -11,20 +11,20 @@
   <body ng-app="election-contrib" ng-strict-di>
 
     <responsive-child>
-      <h1>Where the money went</h1>
-      <p>
-        The following table displays donations made to each of the city council districts. Click a row to see those contributions broken down by candidate.
+      <h1>Campaign contributions in 2015 Seattle City Council races</h1>
+      <p class="chatter">
+        This graphic shows campaign contributions made in each of Seattle’s nine City Council races. Click a race to see compare contributions to different candidates.
       <main class="interactive" ng-controller="table-controller">
 
         <div class="header row">
           <div class="spacer"></div>
           <div class="name">Name</div>
           <div class="total">Total</div>
-          <div class="external">External contributions</div>
-          <div class="by-week">Contributions by week</div>
+          <div class="external">Outside Seattle</div>
+          <div class="by-week">Weekly contributions</div>
         </div>
 
-        <div class="district" ng-repeat="d in contributions" click-toggle="open">
+        <div class="district {{!$index ? 'open' : ''}}" ng-repeat="d in contributions" click-toggle="open">
 
           <div class="row">
 
@@ -33,13 +33,13 @@
               <i class="fa fa-angle-down opened"></i>
             </a>
 
-            <div class="name">District # {{d.district}}</div>
+            <div class="name">{{d.district > 7 ? "Position" : "District"}} # {{d.district}}</div>
 
             <div class="total">${{d.total | number:2}}</div>
 
             <div class="external">
-              <tiny-pie data="d.external / d.total"></tiny-pie>
               {{d.external / d.total * 100 | number: 1}}%
+              <tiny-pie data="d.external / d.total"></tiny-pie>
             </div>
 
             <div class="by-week">
@@ -50,13 +50,13 @@
 
           <div class="candidates">
 
-            <div class="candidate row" ng-repeat="c in d.candidates">
+            <div class="candidate row" ng-repeat="c in d.candidates | orderBy : 'total' : true">
               <div class="spacer"></div>
-              <div class="name">{{c.name}}</div>
+              <div class="name">{{c.fullName}}</div>
               <div class="total">${{c.total | number:2}}</div>
               <div class="external">
-                <tiny-pie data="c.external / c.total"></tiny-pie>
                 {{c.external / c.total * 100 || 0 | number:1}}%
+                <tiny-pie data="c.external / c.total"></tiny-pie>
               </div>
               <div class="by-week">
                 <weekly-histogram data="c.byDate"></weekly-histogram>
@@ -68,6 +68,8 @@
         </div>
 
       </main>
+      <span class="credit">Thomas Wilburn / The Seattle Times</span>
+      <cite class="source">Source: Seattle Ethics and Elections Commission, updated July 21, 2015</cite>
     </responsive-child>
 
     <script>
