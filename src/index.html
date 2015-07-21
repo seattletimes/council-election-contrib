@@ -8,32 +8,64 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <%= t.include("partials/_adHead.html") %>
   </head>
-  <body>
+  <body ng-app="election-contrib" ng-strict-di>
 
     <responsive-child>
-      <h1>Council Election Funding</h1>
-
+      <h1>Where the money went</h1>
       <p>
-        This interactive shows all contributions filed with the Seattle Ethics and Elections Committee for the 2015 race. Tap a district on the map to begin. Swipe or use the arrow keys to move between districts and candidates.
+        The following table displays donations made to each of the city council districts. Click a row to see those contributions broken down by candidate.
+      <main class="interactive" ng-controller="table-controller">
 
-      <main class="interactive">
-        
-          <section class="map card focused">
-            <div class="card-header">
-              Choose a district <a class="fa fa-map-marker geolocate"></a>
+        <div class="header row">
+          <div class="spacer"></div>
+          <div class="name">Name</div>
+          <div class="total">Total</div>
+          <div class="external">External contributions</div>
+          <div class="by-week">Contributions by week</div>
+        </div>
+
+        <div class="district" ng-repeat="d in contributions" click-toggle="open">
+
+          <div class="row">
+
+            <a class="toggle">
+              <i class="fa fa-angle-right closed"></i>
+              <i class="fa fa-angle-down opened"></i>
+            </a>
+
+            <div class="name">District # {{d.district}}</div>
+
+            <div class="total">${{d.total | number:2}}</div>
+
+            <div class="external">
+              <tiny-pie data="d.external / d.total"></tiny-pie>
+              {{d.external / d.total * 100 | number: 1}}%
             </div>
-            <div class="card-content">
-              <div class="map-aspect">
-                <leaflet-map fixed zoom=10>
-                  <tile-layer layer="cartoPositron"></tile-layer>
-                </leaflet-map>
-              <div>
+
+            <div class="by-week">
+              <weekly-histogram data="d.byDate"></weekly-histogram>
             </div>
-          </section>
 
-          <section class="district card offscreen"></section>
+          </div>
 
-          <section class="candidate card offscreen"></section>
+          <div class="candidates">
+
+            <div class="candidate row" ng-repeat="c in d.candidates">
+              <div class="spacer"></div>
+              <div class="name">{{c.name}}</div>
+              <div class="total">${{c.total | number:2}}</div>
+              <div class="external">
+                <tiny-pie data="c.external / c.total"></tiny-pie>
+                {{c.external / c.total * 100 || 0 | number:1}}%
+              </div>
+              <div class="by-week">
+                <weekly-histogram data="c.byDate"></weekly-histogram>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
 
       </main>
     </responsive-child>

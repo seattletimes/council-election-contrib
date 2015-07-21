@@ -1,11 +1,67 @@
 {
-  "1": ["Braddock", "Herbold", "Redmond", "Rushmer", "Tavel", "Thomas", "Wirsing"],
-  "2": ["Farris", "Harrell", "Morales"],
-  "3": ["Banks", "Beach", "Hearne", "Sawant"],
-  "4": ["Godden", "Johnson", "Maddux", "Pacheco", "Provine"],
-  "5": ["Brown", "Dash", "Elizalde", "Juarez", "Lethin", "Toledo", "Watkins"],
-  "6": ["Lisbin", "O'Brien", "Weatbrook"],
-  "7": ["Bagshaw"],
-  "8": ["Burgess", "Grant", "Persak", "Roderick"],
-  "9": ["Bassok", "Bradburd", "González"]
+  "1": [
+    { "short": "Braddock", "long": "Shannon Braddock" },
+    { "short": "Goberman", "long": "Pavel Goberman" },
+    { "short": "Herbold", "long": "Lisa Herbold" },
+    { "short": "Redmond", "long": "Chas Redmond" },
+    { "short": "Robles", "long": "Arturo Robles" },
+    { "short": "Rushmer", "long": "Jody Rushmer" },
+    { "short": "Tavel", "long": "Phillip Tavel" },
+    { "short": "Thomas", "long": "Brianna Thomas" },
+    { "short": "Wirsing", "long": "Karl Wirsing" }
+  ],
+  "2": [
+    { "short": "Farris", "long": "Josh Farris" },
+    { "short": "Harrell", "long": "Bruce Harrell" },
+    { "short": "Morales", "long": "Tammy Morales" }
+  ],
+  "3": [
+    { "short": "Banks", "long": "Pamela Banks" },
+    { "short": "Beach", "long": "Morgan Beach" },
+    { "short": "Carter", "long": "Lee Carter" },
+    { "short": "Hearne", "long": "Rod Hearne" },
+    { "short": "Sawant", "long": "Kshama Sawant" }
+  ],
+  "4": [
+    { "short": "Godden", "long": "Jean Godden" },
+    { "short": "Johnson", "long": "Rob Johnson" },
+    { "short": "Maddux", "long": "Michael Maddux" },
+    { "short":  "Pacheco", "long": "Abel Pacheco" },
+    { "short": "Provine", "long": "Tony Provine" }
+  ],
+  "5": [
+    { "short": "Brown", "long": "Sandy Brown" },
+    { "short": "Dash", "long": "Debadutta Dash" },
+    { "short": "Elizalde", "long": "Mercedes Elizalde" },
+    { "short": "Juarez", "long": "Debora Juarez" },
+    { "short": "Lethin", "long": "Kris Lethin" },
+    { "short": "Russell", "long": "Hugh H. Russell" },
+    { "short": "Toledo", "long": "David Toledo" },
+    { "short": "Watkins", "long": "Halei Watkins" }
+  ],
+  "6": [
+    { "short": "Lisbin", "long": "Jon Lisbin" },
+    { "short": "O'Brien", "long": "Mike O'Brien" },
+    { "short": "Shaufler", "long": "Stan Shaufler" },
+    { "short": "Weatbrook", "long": "Catherine Weatbrook" }
+  ],
+  "7": [
+    { "short": "Bagshaw", "long": "Sally Bagshaw" },
+    { "short": "Hartmann", "long": "Gus Hartmann" },
+    { "short": "Zech-Artis", "long": "Deborah Zech-Artis" }
+  ],
+  "8": [
+    { "short": "Burgess", "long": "Tim Burgess" },
+    { "short": "Grant", "long": "Jon Grant" },
+    { "short": "Persak", "long": "John Persak" },
+    { "short": "Roderick", "long": "John Roderick" }
+  ],
+  "9": [
+    { "short": "Bassok", "long": "Alon Bassok" },
+    { "short": "Bradburd", "long": "Bill Bradburd" },
+    { "short": "González", "long": "Lorena González" },
+    { "short": "Tahir-Garrett", "long": "Omari Tahir-Garrett" },
+    { "short": "Tobin", "long": "Thomas A. Tobin" },
+    { "short": "Tsimerman", "long": "Alex Tsimerman" }
+  ]
 }

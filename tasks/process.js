@@ -13,6 +13,17 @@ module.exports = function(grunt) {
 
     var dateCutoff = new Date(2015, 0, 1);
 
+    var createDateHash = function() {
+      var dates = {};
+      var week = moment(dateCutoff).day(0);
+      var now = new Date();
+      while (week.isBefore(now)) {
+        dates[week.valueOf()] = 0;
+        week.add(7, "days");
+      }
+      return dates;
+    };
+
     /*
     First we sort all the records into campaigns.
     */
@@ -47,12 +58,13 @@ module.exports = function(grunt) {
       var agg = {
         name: campaign,
         total: 0,
+        external: 0,
         count: c.length,
         byDistrict: {
           none: 0
         },
         seattle: 0,
-        byDate: {}
+        byDate: createDateHash()
       };
       for (var i = 1; i < 10; i++) agg.byDistrict[i] = 0;
       c.forEach(function(contrib) {
@@ -63,7 +75,6 @@ module.exports = function(grunt) {
           var date = moment(contrib.date);
           date.day(0);
           var timestamp = date.valueOf();
-          if (!agg.byDate[timestamp]) agg.byDate[timestamp] = 0;
           agg.byDate[timestamp] += a;
         }
         agg.byDistrict[contrib.district || "none"] += a;
@@ -86,22 +97,41 @@ module.exports = function(grunt) {
     var races = {};
     for (var district in grunt.data.json.races) {
       var candidates = grunt.data.json.races[district];
-      candidates = candidates.map(function(candidate) { return aggregated[candidate] });
+      candidates = candidates.map(function(candidate) {
+        var c = aggregated[candidate.short];
+        if (!c) {
+          return {
+            name: candidate.short,
+            fullName: candidate.long,
+            byDistrict: {},
+            byDate: createDateHash(),
+            total: 0,
+            seattle: 0
+          }
+        }
+        c.fullName = candidate.long;
+        return c;
+      });
+      var byDate = createDateHash();
+      candidates.forEach(function(c) {
+        for (var d in c.byDate) {
+          byDate[d] += c.byDate[d];
+        }
+        //external is just for people outside the city
+        if (false && district <= 7) {
+          c.external = c.total - c.byDistrict[district] || 0;
+        } else {
+          c.external = c.total - c.seattle || 0;
+        }
+      });
       var race = {
         district: district,
         candidates: candidates,
-        total: candidates.reduce(function(prev, d) { return prev + d.total }, 0),
-        count: candidates.reduce(function(prev, d) { return prev + d.count }, 0),
-        external: candidates.reduce(function(prev, d) { return prev + (d.total - d.byDistrict[district]) }, 0)
+        total: candidates.reduce(function(prev, c) { return prev + c.total }, 0),
+        count: candidates.reduce(function(prev, c) { return prev + c.count }, 0),
+        external: candidates.reduce(function(prev, c) { return prev + c.external }, 0),
+        byDate: byDate
       };
-      var byDate = {};
-      candidates.forEach(function(c) {
-        for (var d in c.byDate) {
-          if (!byDate[d]) byDate[d] = 0;
-          byDate[d] += c.byDate[d];
-        }
-      });
-      race.byDate = byDate;
       races[district] = race;
     }
 

@@ -5,88 +5,116 @@
 require("component-responsive-frame/child");
 require("component-leaflet-map");
 
+require("angular");
+
 var delegate = require("./delegate");
 
-var map = require("./geojson");
-var graphing = require("./graph");
+var app = angular.module("election-contrib", []);
 
-var dot = require("dot");
-dot.templateSettings.varname = "data";
-dot.templateSettings.selfcontained = true;
-dot.templateSettings.evaluate = /<%([\s\S]+?)%>/g;
-dot.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
-
-var districtTemplate = dot.compile(require("./_district.html"));
-var candidateTemplate = dot.compile(require("./_candidate.html"));
-
-var interactive = document.querySelector("main.interactive");
-
-var mapCard = document.querySelector(".map.card");
-var districtCard = document.querySelector(".district.card");
-var candidateCard = document.querySelector(".candidate.card");
-
-var pushCard = function(next) {
-  var top = document.querySelector(".focused.card");
-
-  next.classList.remove("offscreen");
-  top.classList.remove("focused");
-  next.classList.add("focused");
-  next.classList.add("enter");
-
-  var _ = document.body.offsetWidth;
-
-  next.classList.add("enable-transition");
-  top.classList.add("enable-transition");
-  next.classList.remove("enter");
-  top.classList.add("background");
-
-  setTimeout(_ => {
-    next.classList.remove("enable-transition");
-    top.classList.remove("enable-transition");
-  }, 500)
+var TableController = function($scope) {
+  $scope.contributions = window.contribData;
 };
 
-map.onDistrict(function(e) {
+TableController.$inject = ["$scope"];
 
-  var district = window.contribData[e.district];
-  districtCard.innerHTML = districtTemplate(district);
+app.controller("table-controller", TableController);
 
-  pushCard(districtCard);
-
-  graphing.externalPie(districtCard.querySelector(".external"), district.external / district.total);
-  graphing.timeseries(districtCard.querySelector(".by-date"), district.byDate);
-
-});
-
-delegate(interactive, "select.choose-candidate", "change", function(e) {
-  var value = e.target.value;
-  if (!value) return;
-
-  var district = e.target.getAttribute("data-district");
-  var candidate = window.contribData[district].candidates.filter(c => c.name == value).pop();
-
-  if (!candidate) return;
-
-  candidateCard.innerHTML = candidateTemplate(candidate);
-
-  pushCard(candidateCard);
-});
-
-delegate(interactive, ".card.background", "click", function(e) {
-
-  var target = this;
-
-  var remove = target.nextElementSibling;
-
-  while (remove && remove.classList.contains("card")) {
-    remove.classList.remove("focused");
-    remove.classList.remove("background");
-    remove.classList.add("offscreen");
-    remove = remove.nextElementSibling;
+app.directive("clickToggle", function() {
+  return {
+    restrict: "A",
+    link: function(scope, element, attrs) {
+      var className = attrs.clickToggle;
+      element.on("click", () => element.toggleClass(className));
+    }
   }
+})
 
-  target.classList.add("enable-transition");
-  target.classList.add("focused");
-  target.classList.remove("background");
+app.directive("tinyPie", function() {
+  return {
+    template: `
+<canvas></canvas>
+    `,
+    restrict: "E",
+    scope: {
+      data: "&"
+    },
+    link: function(scope, element, attrs) {
+      var external = scope.data();
+      var canvas = element.find("canvas")[0];
+      var context = canvas.getContext("2d");
+      canvas.width = 16;
+      canvas.height = 16;
 
+      var cx = canvas.width / 2;
+      var cy = canvas.height / 2;
+
+      //internal = full circle
+      context.beginPath();
+      context.moveTo(cx, cy);
+      context.arc(cx, cy, cx, 0, Math.PI * 2);
+      context.fillStyle = "#ddd";
+      context.fill();
+
+      //external = fill
+      var start = Math.PI * -.5;
+      var end = start + (external * Math.PI * 2);
+      context.beginPath();
+      context.moveTo(cx, cy);
+      context.arc(cx, cy, cx, start, end);
+      context.fillStyle = "#262";
+      context.fill();
+
+    }
+  }
 });
+
+app.directive("weeklyHistogram", function() {
+  return {
+    template: `
+<canvas></canvas>
+<div class="tooltip"></div>
+    `,
+    restrict: "E",
+    scope: {
+      data: "="
+    },
+    link: function(scope, element, attrs) {
+      var data = scope.data;
+      var canvas = element.find("canvas")[0];
+      var context = canvas.getContext("2d");
+      canvas.width = 300;
+      canvas.height = 16;
+
+      var timestamps = Object.keys(data).map(Number);
+      var values = timestamps.map(t => data[t]);
+      var limits = {
+        x: {
+          min: Math.min.apply(null, timestamps),
+          max: Math.max.apply(null, timestamps)
+        },
+        y: {
+          min: 0,
+          max: Math.max.apply(null, values)
+        }
+      };
+
+      var scaleX = t => (t - limits.x.min) / (limits.x.max - limits.x.min);
+      var scaleY = v => v / limits.y.max;
+      var hsl = (h, s, l) => `hsl(${h}, ${s}%, ${l}%)`;
+
+      var week = 1000 * 60 * 60 * 24 * 7
+      var barWidth = canvas.width / ((limits.x.max + week - limits.x.min) / week);
+
+      timestamps.sort().forEach((t, i) => {
+
+        var v = data[t];
+
+        var x = scaleX(t) * canvas.width;
+        var y = canvas.height - scaleY(v) * canvas.height;
+        context.fillStyle = hsl(i * 2 + 100, 30, 50);
+        context.fillRect(x, y, barWidth, canvas.height - y);
+      });
+    }
+  }
+});
+
