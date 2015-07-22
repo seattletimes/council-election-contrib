@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <%= t.include("partials/_adHead.html") %>
   </head>
-  <body ng-app="election-contrib" ng-strict-di>
+  <body ng-app="election-contrib">
 
     <responsive-child>
       <h1>Campaign contributions in 2015 Seattle City Council races</h1>
       <p class="chatter">
         This graphic shows campaign contributions made in each of Seattle’s nine City Council races. Click a race to see compare contributions to different candidates.
+      </p>
       <main class="interactive" ng-controller="table-controller">
 
         <div class="header row">

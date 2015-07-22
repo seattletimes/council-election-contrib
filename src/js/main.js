@@ -3,7 +3,7 @@
 // var track = require("./lib/tracking");
 
 require("component-responsive-frame/child");
-require("component-leaflet-map");
+// require("component-leaflet-map");
 
 require("angular");
 var moment = require("moment");
@@ -13,7 +13,8 @@ var delegate = require("./delegate");
 var app = angular.module("election-contrib", []);
 
 var TableController = function($scope) {
-  $scope.contributions = window.contribData;
+  $scope.contributions = Object.keys(window.contribData).map(k => window.contribData[k]);
+  $scope.list = ["a", "b", "c"]
 };
 
 TableController.$inject = ["$scope"];
@@ -130,8 +131,8 @@ app.directive("weeklyHistogram", function() {
 
       canvas.addEventListener("mousemove", function(e) {
         var bounds = canvas.getBoundingClientRect();
-        var x = e.clientX - bounds.x;
-        var y = e.clientY - bounds.y;
+        var x = e.clientX - bounds.left;
+        var y = e.clientY - bounds.top;
 
         var xScale = canvas.width / canvas.offsetWidth;
 

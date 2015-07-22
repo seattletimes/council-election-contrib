@@ -36,7 +36,7 @@ module.exports = function(grunt) {
       var dateParts = row.strTransactionDate.split("/");
       var date = dateParts.length == 3 ? new Date(dateParts[2], dateParts[0] - 1, dateParts[1]) : null;
       var data = {
-        amount: row.moneyAmount,
+        amount: row.moneyContributionsEffect_SEEC,
         date: date,
         inSeattle: zips.indexOf(row.strZip * 1) > -1,
         name: row.strTransactorName,
