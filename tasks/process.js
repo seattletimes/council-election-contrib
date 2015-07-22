@@ -6,6 +6,8 @@ module.exports = function(grunt) {
     grunt.task.requires("csv");
     grunt.task.requires("json");
 
+    grunt.log.writelns("NOTE: HAVE YOU CHECKED THIS DATA? HAVE YOU SAVED THE CSV AS UTF8 WITH BOM? HAVE YOU REPLACED THE ENTITY IN O'BRIEN'S NAME?")
+
     var moment = require("moment");
    
     var candidates = {};

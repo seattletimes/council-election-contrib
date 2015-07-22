@@ -5,8 +5,8 @@
       "path": "down-scrutiny"
     },
     "live": {
-      "bucket": "",
-      "path": ""
+      "bucket": "projects.seattletimes.com",
+      "path": "2015/politics/contribution-table"
     }
   },
   "title": "",
@@ -15,6 +15,6 @@
   "slug": "",
   "tags": [],
   "image": "http://seattletimes.com/art/ui/fb_icon_large.jpg",
-  "production": false,
+  "production": true,
   "embedded": true
 }

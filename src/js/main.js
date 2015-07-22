@@ -14,7 +14,6 @@ var app = angular.module("election-contrib", []);
 
 var TableController = function($scope) {
   $scope.contributions = Object.keys(window.contribData).map(k => window.contribData[k]);
-  $scope.list = ["a", "b", "c"]
 };
 
 TableController.$inject = ["$scope"];
