@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       var data = {
         amount: row.moneyContributionsEffect_SEEC,
         date: date,
-        inSeattle: zips.indexOf(row.strZip * 1) > -1,
+        inSeattle: !row.strZip || zips.indexOf(row.strZip * 1) > -1,
         name: row.strTransactorName,
         district: row.intCodedDistrict_SEEC > 9 ? "" : row.intCodedDistrict_SEEC
       }

@@ -8,6 +8,7 @@
     "url": "https://github.com/seattletimes/council-election-contrib.git"
   },
   "dependencies": {
+    "angular": "^1.4.3",
     "async": "^1.2.1",
     "aws-sdk": "^2.1.25",
     "babelify": "^6.0.2",
