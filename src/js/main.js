@@ -6,7 +6,7 @@ require("component-responsive-frame/child");
 // require("component-leaflet-map");
 
 require("angular");
-var moment = require("moment");
+var moment = require("moment/min/moment.min.js");
 
 var delegate = require("./delegate");
 
